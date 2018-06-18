@@ -1,0 +1,10 @@
+Newspeak3
+'NS101'
+class Foo = (
+|
+	slot1
+	slot2
+|
+) (
+) : (
+)
