@@ -6,5 +6,7 @@ class Foo = (
 	slot2
 |
 ) (
+public hello = ( ^'world'
+)
 ) : (
 )
