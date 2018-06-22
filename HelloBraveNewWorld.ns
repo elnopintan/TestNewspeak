@@ -1,0 +1,20 @@
+Newspeak3
+'NS101'
+class HelloBraveNewWorld usingPlatform: platform = (
+| private Presenter = platform hopscotch core Presenter.
+  private Subject = platform hopscotch core Subject. |
+) (
+class BraveNewWorldPresenter onSubject: s <Subject> = Presenter onSubject: s () (
+public definition  ^<Fragment>= (
+^label: 'Hello Brave new world'.
+)
+) : (
+)
+public class BraveNewWorldSubject onModel: m  = Subject onModel: m () (
+public createPresenter ^ <Presenter> = (
+^BraveNewWorldPresenter onSubject: self
+)
+) : (
+)
+) : (
+)
