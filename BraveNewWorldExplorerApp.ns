@@ -1,0 +1,16 @@
+Newspeak3
+'NS101'
+class BraveNewWorldExplorerApp packageUsing: manifest = (
+|
+	private BraveNewWorldExplorer = manifest BraveNewWorldExplorer.
+	|
+) (
+public main: platform args: as = (
+| fn <String> |
+fn:: as at: 1 ifAbsent: ['Users'].
+platform hopscotch core HopscotchWindow
+   openSubject: ((BraveNewWorldExplorer usingPlatform: platform) FileSubject onModel: fn
+	)
+)
+) : (
+)

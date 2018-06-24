@@ -6,9 +6,21 @@ class BraveNewWorldExplorer usingPlatform: platform = (
 	private Subject = platform hopscotch core Subject.
 	private FilePath = platform files FilePath.
 	private List = platform collections List.
+	private Color = platform graphics Color.
 |
 ) (
 class FilePresenter onSubject: s <Subject> = Presenter onSubject: s () (
+bar: def <Fragment> ^ <Fragment> = (
+ ^(column: { 
+      blank: 2.
+ 	row: {	
+		blank: 4.
+ 		elastic: def.
+ 		blank: 4.
+ 	}.
+ 	blank: 2.
+ 	}) color: (Color gray: 0.9)
+)
 public definition ^ <Fragment> = (
 ^subject isDirectory
  ifTrue: [directoryPresentation]
@@ -18,15 +30,24 @@ directoryContentsPresenters ^ <Collection[Presenter]> = (
  ^subject contents collect: [:each | each presenter]
 )
 directoryPresentation ^ <Fragment> = (
- ^heading: filePresentation
+ ^heading: (bar: (link: subject localFileName action: [openOnNewPage]))
  details: [column: directoryContentsPresenters]
+ initiallyExpanded: subject initiallyExpanded
 )
 filePresentation ^ <Fragment> = (
  ^label: subject localFileName
 )
+openOnNewPage = (
+ enterSubject:: (subject class onModel: subject model) initiallyExpanded: true
+)
 ) : (
 )
-public class FileSubject onModel: m <String> = Subject onModel: m () (
+public class FileSubject onModel: m <String> = Subject onModel: m (|
+public initiallyExpanded <Boolean> ::=false.
+|) (
+public = x ^ <Boolean> = (
+ ^x isKindOfFileSubject and: [x fullFilePath = fullFilePath and: [x initiallyExpanded = initiallyExpanded]] 
+)
 public contents ^ <Collection[FileSubject]> = (
 (* Answer a collection of subjects on the receiver elements *)
 ^isDirectory
@@ -46,14 +67,23 @@ public createPresenter ^ <Presenter> = (
 public fullFilePath ^ <String> = (
  ^model
 )
+public hash ^ <Integer> = (
+ ^class hash bitXor: model hash
+)
 public isDirectory ^ <Boolean> = (
  ^(FilePath for: fullFilePath) isDirectory
+)
+public isKindOfFileSubject ^ <Boolean> = (
+ ^ true
 )
 public localFileName ^ <String> = (
  (* Answer only the file name portion of the path name *)
 ^(FilePath for: fullFilePath) simpleName
 )
 public model = (^super model.)
+public title ^ <String> = (
+ ^fullFilePath
+)
 ) : (
 )
 ) : (
