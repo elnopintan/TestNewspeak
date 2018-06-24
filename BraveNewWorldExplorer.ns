@@ -1,0 +1,60 @@
+Newspeak3
+'NS101'
+class BraveNewWorldExplorer usingPlatform: platform = (
+|
+	private Presenter = platform hopscotch core Presenter.
+	private Subject = platform hopscotch core Subject.
+	private FilePath = platform files FilePath.
+	private List = platform collections List.
+|
+) (
+class FilePresenter onSubject: s <Subject> = Presenter onSubject: s () (
+public definition ^ <Fragment> = (
+^subject isDirectory
+ ifTrue: [directoryPresentation]
+ ifFalse: [filePresentation]
+)
+directoryContentsPresenters ^ <Collection[Presenter]> = (
+ ^subject contents collect: [:each | each presenter]
+)
+directoryPresentation ^ <Fragment> = (
+ ^heading: filePresentation
+ details: [column: directoryContentsPresenters]
+)
+filePresentation ^ <Fragment> = (
+ ^label: subject localFileName
+)
+) : (
+)
+public class FileSubject onModel: m <String> = Subject onModel: m () (
+public contents ^ <Collection[FileSubject]> = (
+(* Answer a collection of subjects on the receiver elements *)
+^isDirectory
+ifTrue:
+ [ | thisDirectory |
+   thisDirectory: (FilePath for: fullFilePath).
+   thisDirectory entries collect:
+   [:each | 
+       FileSubject onModel: each name
+    ]
+ ]
+  ifFalse: [List new]
+)
+public createPresenter ^ <Presenter> = (
+ ^FilePresenter onSubject: self
+)
+public fullFilePath ^ <String> = (
+ ^model
+)
+public isDirectory ^ <Boolean> = (
+ ^(FilePath for: fullFilePath) isDirectory
+)
+public localFileName ^ <String> = (
+ (* Answer only the file name portion of the path name *)
+^(FilePath for: fullFilePath) simpleName
+)
+public model = (^super model.)
+) : (
+)
+) : (
+)
